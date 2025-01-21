@@ -1,0 +1,22 @@
+<div class="jumbotron">
+  <h1 class="display-4">Olá, bem vindo ao blog do node!</h1>
+  <p class="lead">Este blog foi feito com nodejs-express .</p>
+  <hr class="my-4">
+  <p>Ele usa classes utilitárias para tipografia e espaçamento de conteúdo, dentro do maior container.</p>
+  <a class="btn btn-primary btn-lg" href="usuario/registrar" role="button">Crie uma conta</a>
+</div>
+
+<hr>
+
+<h2>Postagens recentes: </h2>
+
+{{#each postagens}}
+<div class="card">
+    <div class="card-body">
+        <h4>{{titulo}}</h4>
+        <h5>{{descricao}}</h5>
+    </div>
+</div>
+{{else}}
+    <h5>Nenhuma postagem</h5>
+{{/each}}

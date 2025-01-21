@@ -1,0 +1,17 @@
+<h3>Nova postagem: </h3>
+<div class="card">
+    <div class="card-body" >
+        <form action="/admin/posts/add/novo" method="POST">
+            <label for="titulo">Titulo: </label>
+            <input type="text" name="titulo" class="form-control">
+            <label for="slug">Slug: </label>
+            <input type="text" name="slug" class="form-control">
+            <label for="descricao">Descrição: </label>
+            <input type="text" name="descricao" class="form-control">
+            <label for="conteudo">Conteúdo: </label> <br>
+            <textarea name="conteudo"></textarea>
+            <button type="submit">Criar postagem</button>
+
+        </form>
+    </div>
+</div>

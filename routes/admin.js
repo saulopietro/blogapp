@@ -2,13 +2,81 @@ const express = require('express');
 const router = express.Router()
 const Categoria = require('../models/Categoria');
 const db = require('../models/db');
+const Postagem = require('../models/Postagem');
+
 
 router.get('/', (req, res) => {
     res.render('./admin/index')
 })
 
+
 router.get('/posts', (req, res) => {
-    res.send('Pagina de posts')
+    Postagem.findAll().then((postagens) => {
+        const simplePost = postagens.map(postagem => postagem.dataValues)
+        res.render('admin/postagens', {postagens: simplePost})
+    }).catch((err) => {
+        req.flash("error_msg", 'Houve um erro ao listar as postagens')
+        res.redirect('/admin/categorias')
+    })
+})
+router.get('/posts/add', (req, res) => { 
+    res.render('admin/addpostagens')
+})
+
+router.post('/posts/add/novo', (req, res) => { 
+    let erros = []
+
+    if(!req.body.titulo || req.body.titulo == undefined || req.body.titulo == null) {
+        erros.push({texto: 'Titulo invalido'})
+        console.log(erros);
+    }
+    
+    if(!req.body.slug || req.body.slug == undefined || req.body.slug == null) {
+        erros.push({texto: 'Slug invalido'})
+        console.log(erros);
+    }
+
+    if(!req.body.descricao || req.body.descricao == undefined || req.body.descricao == null) {
+        erros.push({texto: 'Descrição invalida'})
+        console.log(erros);
+    }
+    
+    if(!req.body.conteudo || req.body.conteudo == undefined || req.body.conteudo == null) {
+        erros.push({texto: 'Conteúdo invalido'})
+        console.log(erros);
+    }
+    
+    if(erros.length > 0) {
+        res.render('admin/postagens', {erros: erros})
+        
+    }else {
+        Postagem.create({
+            titulo: req.body.titulo,
+            slug: req.body.slug,
+            descricao: req.body.descricao,
+            conteudo: req.body.conteudo
+        }).then(() => {
+            req.flash('success_msg', 'Postagem criada com sucesso!')
+            res.redirect('/admin/posts')
+        }).catch((err) => {
+            req.flash('error_msg', 'Houve um problema ao salvar a postagem, tente novamente!')
+            console.log(err);
+        }) 
+    }
+
+
+
+    console.log(erros);
+})
+
+router.get('/posts', (req, res) => {
+    Postagem.findAll().then((postagens) => {
+        const simplePost = postagens.map(postagem => postagem.dataValues)
+        res.render('admin/posts', {postagens: simplePost})
+    }).catch((err) => {
+        req.flash("error_msg", 'Houve um erro ao listar as postagens')
+        res.redirect('/admin/categorias')
+    })
 })
 
 router.get('/categorias', (req, res) => {
